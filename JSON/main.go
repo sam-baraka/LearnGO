@@ -5,26 +5,32 @@ import (
 	"fmt"
 )
 
-type Book struct {
-	Title  string `json:"title"`
-	Author Author `json:"author"`
+type SensorReading struct {
+	Name        string `json:"name"`
+	Capacity    int    `json:"capacity"`
+	Time        string `json: "time"`
+	Information Info   `json:"info"`
 }
 
-type Author struct {
-	Name      string `json:"name"`
-	Age       int    `json:"age"`
-	Developer bool   `json:"is_developer"`
+type Info struct {
+	Description string `json:"desc"`
 }
 
 func main() {
 
-	author := Author{Name: "Samuel Baraka", Age: 22, Developer: true}
+	jsonString := `{"name":"battery sensor","capacity":40,"time":"2020-04-05",
+    "info":{
+        "desc":"sensor reading"
+    }}`
 
-	book := Book{Title: "Learning JSON in GO", Author: author}
-	fmt.Printf("%+v\n", book)
-	byteArray, err := json.MarshalIndent(book, "", "  ")
+	var reading SensorReading
+
+	err := json.Unmarshal([]byte(jsonString), &reading)
+
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(string(byteArray))
+
+	fmt.Printf("%+v\n", reading)
+
 }
