@@ -27,6 +27,10 @@
             console.log("Socket Error: ", error);
         };
 
+        socket.onmessage =(msg)=>{
+            console.log(msg)
+        }
+
     </script>
   </body>
 </html>
