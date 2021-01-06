@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -9,17 +8,21 @@ import (
 )
 
 func main() {
-	fmt.Println("Hello Sam")
-
 	server := socketio.NewServer(nil)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	server.OnConnect("/", func(s socketio.Conn) error {
-		s.SetContext("")
-		log.Println("New Connection")
-		return nil
+
+	// server.OnConnect("/", func(s socketio.Conn) error {
+	// 	s.SetContext("")
+	// 	log.Println("New Connection")
+	// 	return nil
+	// })
+
+	server.OnConnect("connection", func(so socketio.Socket) {
+
+		log.Println("on connection")
 	})
+
+	fs := http.FileServer(http.Dir("static"))
+	http.Handle("/", fs)
 
 	http.Handle("/socket.io/", server)
 	log.Fatal(http.ListenAndServe(":5000", nil))
